@@ -20,40 +20,36 @@ jobs:
         run: |
           echo "Current directory contents:"
           dir
-          echo "frontend directory contents:"
-          dir ./frontend
+          echo "Client directory contents:"
+          dir ./Client
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '18.x'  # Use the appropriate Node.js version for your app
+          node-version: '18.x'
 
       - name: npm install, build, and test
-        working-directory: ./frontend  # Set working directory to 'frontend' folder
+        working-directory: ./Client
         run: |
           npm install
           npm run build
 
-      # zip the build directory
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.7.1
         with:
-          # Filename for archive
           filename: release.zip
-          # Base path for archive files
-          path: ./build  # Zip the 'build' folder inside 'frontend'
-          # Working directory before zipping: './frontend'
+          path: ./build
 
       - name: List build directory contents
         run: |
           echo "Build directory contents:"
-          dir ${{ github.workspace }}/frontend/build
+          dir ${{ github.workspace }}/Client/build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: ./frontend/build  # Upload the 'build' folder inside 'frontend'
+          path: ./Client/build
 
   deploy:
     runs-on: ubuntu-latest
@@ -71,7 +67,7 @@ jobs:
       - name: List deployment directory contents
         run: |
           echo "Deployment directory contents:"
-          dir ${{ github.workspace }}/frontend/build
+          dir ${{ github.workspace }}/Client/build
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
@@ -80,5 +76,5 @@ jobs:
           app-name: 'Edutrack'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_873EFD2D3CF0457FAE19C65201634F8A }}
-          package: ${{ github.workspace }}/frontend/build/release.zip  # Deploy the 'release.zip' file inside 'frontend/build' directory
+          package: ${{ github.workspace }}/Client/build/release.zip
 
