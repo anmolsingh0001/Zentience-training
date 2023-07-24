@@ -71,5 +71,5 @@ jobs:
           app-name: 'Edutrack'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_873EFD2D3CF0457FAE19C65201634F8A }}
-          package: ${{ github.workspace }}/Client/build/release.zip
+          package: ./Client/build/release.zip
 
