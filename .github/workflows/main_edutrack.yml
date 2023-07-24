@@ -34,7 +34,7 @@ jobs:
           # Filename for archive
           filename: release.zip
           # Base path for archive files
-          path: ./frontend/build  # Zip the 'build' folder inside 'frontend'
+          path: ./build  # Zip the 'build' folder inside 'frontend'
           # Working directory before zipping: './frontend'
 
       - name: Upload artifact for deployment job
