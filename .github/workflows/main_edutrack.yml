@@ -64,11 +64,6 @@ jobs:
         with:
           name: node-app
 
-      - name: List deployment directory contents
-        run: |
-          echo "Deployment directory contents:"
-          dir ${{ github.workspace }}/Client/build
-
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
