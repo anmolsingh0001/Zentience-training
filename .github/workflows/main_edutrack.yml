@@ -19,10 +19,10 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'  # Use the appropriate Node.js version for your app
+          node-version: '18.x'  # Use the appropriate Node.js version for your app
 
       - name: npm install, build, and test
-        working-directory: ./frontend  # Set working directory to 'frontend' folder
+        working-directory: frontend  # Set working directory to 'frontend' folder
         run: |
           npm install
           npm run build
