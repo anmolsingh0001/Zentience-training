@@ -16,13 +16,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: List directory contents
+        run: |
+          echo "Current directory contents:"
+          dir
+          echo "frontend directory contents:"
+          dir ./frontend
+
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
           node-version: '18.x'  # Use the appropriate Node.js version for your app
 
       - name: npm install, build, and test
-        working-directory: frontend  # Set working directory to 'frontend' folder
+        working-directory: ./frontend  # Set working directory to 'frontend' folder
         run: |
           npm install
           npm run build
@@ -36,6 +43,11 @@ jobs:
           # Base path for archive files
           path: ./build  # Zip the 'build' folder inside 'frontend'
           # Working directory before zipping: './frontend'
+
+      - name: List build directory contents
+        run: |
+          echo "Build directory contents:"
+          dir ${{ github.workspace }}/frontend/build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -55,6 +67,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: node-app
+
+      - name: List deployment directory contents
+        run: |
+          echo "Deployment directory contents:"
+          dir ${{ github.workspace }}/frontend/build
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
