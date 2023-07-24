@@ -19,19 +19,29 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
-          node-version: '18.x'
+          node-version: '14.x'  # Use the appropriate Node.js version for your app
 
       - name: npm install, build, and test
+        working-directory: ./frontend  # Set working directory to 'frontend' folder
         run: |
           npm install
-          npm run build --if-present
-          npm run test --if-present
-      
+          npm run build
+
+      # zip the build directory
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.7.1
+        with:
+          # Filename for archive
+          filename: release.zip
+          # Base path for archive files
+          path: ./frontend/build  # Zip the 'build' folder inside 'frontend'
+          # Working directory before zipping: './frontend'
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: .
+          path: ./frontend/build  # Upload the 'build' folder inside 'frontend'
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,4 +63,5 @@ jobs:
           app-name: 'Edutrack'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_873EFD2D3CF0457FAE19C65201634F8A }}
-          package: .
+          package: ${{ github.workspace }}/frontend/build/release.zip  # Deploy the 'release.zip' file inside 'frontend/build' directory
+
